@@ -2,8 +2,8 @@ var express        = require('express'),
     app            = express(),
     request        = require("request"),
     bodyParser     = require("body-parser"),
-    webpush        = require("web-push"),
     dotenv         = require("dotenv"),
+    nodemailer     = require("nodemailer");
     usd_price_tl   = 1;
 
 dotenv.config();
@@ -11,12 +11,6 @@ dotenv.config();
 app.set("view engine", "ejs");
 app.use(express.static(__dirname));
 app.use(bodyParser.json());
-
-webpush.setVapidDetails(
-  "mailto:test@test.com",
-  process.env.PUBLICVAPIDKEY,
-  process.env.PRIVATEVAPIDKEY,
-);
 
 app.get('/', (req, res) => {
     res.redirect("standings");
@@ -71,25 +65,45 @@ app.get("/standings", (req, res) => {
     });
 });
 
-app.post("/subscribe", (req, res) => {
-  // Get pushSubscription object
-  const subscription = req.body;
-
-  // Send 201 - resource created
-  res.status(201).json({});
-
-  // Create payload
-  const payload = JSON.stringify({ title: "Silivri Premier League" });
-
-  // Pass object into sendNotification
-  webpush
-    .sendNotification(subscription, payload)
-    .catch(err => console.error(err));
-  });
-
 function round(value, decimals) {
     return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals).toFixed(decimals);
 };
+
+async function main(){
+
+  // create reusable transporter object using the default SMTP transport
+  var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+          xoauth2: xoauth2.createXOAuth2Generator({
+              user: '{username}',
+              clientId: '{Client ID}',
+              clientSecret: '{Client Secret}',
+              refreshToken: '{refresh-token}',
+              accessToken: '{cached access token}'
+          })
+      }
+  });
+
+  // setup email data with unicode symbols
+  let mailOptions = {
+    from: '"Fred Foo 👻" doganpamuklu05@gmail.com', // sender address
+    to: "doganpamuklu05@gmail.com", // list of receivers
+    subject: "Hello ✔", // Subject line
+    text: "Hello world?", // plain text body
+    html: "<b>Hello world?</b>" // html body
+  };
+
+  // send mail with defined transport object
+  let info = await transporter.sendMail(mailOptions)
+
+  console.log("Message sent: %s", info.messageId);
+  // Preview only available when sending through an Ethereal account
+  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+
+  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+  // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+}
 
 app.listen(process.env.PORT , function() {
   console.log("SERVER IS RUNNING")
