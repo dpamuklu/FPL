@@ -35,43 +35,10 @@
          </div>
       </nav>
       <br>
-      <div class="container-fluid">
-         <div class="table-responsive" >
-            <caption>
-               <%= league_name  %>
-               <small class="text-muted"> Lapa Kadir Sezonu </small>
-            </caption>
-            <table class="table table-bordered">
-               <thead>
-                  <tr>
-                     <th scope="col">#</th>
-                     <th scope="col">Takim</th>
-                     <!-- <th scope="col">Isim</th> -->
-                     <th scope="col">Toplam Skor</th>
-                     <th scope="col">Puan</th>
-                     <th scope="col">Ödül(TL)</th>
-                     <th scope="col">Ödül($)</th>
-                  </tr>
-               </thead>
-               <tbody>
-                  <% teams.forEach(function(team){ %>
-                  <tr class="table-danger">
-                  <tr>
-                     <th scope="row"><%= team.rank   %></th>
-                     <td><%= team.entry_name   %></td>
-                     <!-- <td><%= team.player_name  %></td> -->
-                     <td><%= team.points_for   %></td>
-                     <td><%= team.points_total %></td>
-                     <td id="prize_tl"><%= team.prize_tl	  %></td>
-                     <td><%= team.prize_usd    %></td>
-                  </tr>
-                  <% }) %>
-               </tbody>
-            </table>
-         </div>
+      <div class="container">
+        Results is to be displayed here.
       </div>
 
-      <!-- </div> -->
       <!-- jQuery first, then Popper.js, then Bootstrap JS -->
       <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"                          integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
