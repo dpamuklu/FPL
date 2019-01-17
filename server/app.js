@@ -13,7 +13,7 @@ var rootDir = "";
 
 if (process.env.NODE_ENV === "production") {
   console.log('test');
-  app.use(express.static("client/dist")) }
+  app.use(express.static("/client/dist")) }
 else {
  rootDir = path.join(__dirname, '../', 'client/dist/');
  app.use(express.static(rootDir));
