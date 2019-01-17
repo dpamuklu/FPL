@@ -13,9 +13,11 @@ var rootDir = "";
 
 if (process.env.NODE_ENV === "production") {
   console.log('test');
-  app.use(path.join(__dirname, '/dist/')) }
+  console.log(path.join(__dirname, '/dist/'));
+  app.use(express.static(rootDir)); }
 else {
  rootDir = path.join(__dirname, '../', 'client/dist/');
+ console.log(path.join(__dirname, '/dist/'));
  app.use(express.static(rootDir));
 }
 
@@ -24,7 +26,6 @@ dotenv.config();
 
 app.use(bodyParser.json());
 app.use(cors());
-app.use(express.static(rootDir));
 
 app.get("/api/all", async function(req, res) {
   var info = await functions.get_data();
