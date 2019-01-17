@@ -16,8 +16,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server/app.js",
-    "heroku-postinstall": "npm install && npm run build"
+    "start": "node server/app.js"
   },
   "repository": {
     "type": "git",
