@@ -2,7 +2,7 @@
   "name": "fpl",
   "version": "1.0.0",
   "description": "FPL ",
-  "main": "app.js",
+  "main": "server/app.js",
   "dependencies": {
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
@@ -16,8 +16,8 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js",
-    "heroku-postbuild": "npm install --only=dev --no-shrinkwrap && npm run build"
+    "start": "node server/app.js",
+    "heroku-postinstall": "npm install && npm run build"
   },
   "repository": {
     "type": "git",
