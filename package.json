@@ -2,7 +2,7 @@
   "name": "fpl",
   "version": "1.0.0",
   "description": "FPL ",
-  "main": "server/app.js",
+  "main": "app.js",
   "dependencies": {
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
@@ -16,7 +16,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server/app.js"
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
