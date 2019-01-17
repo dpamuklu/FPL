@@ -2,19 +2,19 @@
   <div id="app">
     <navbar></navbar>
     <br>
-    <standingsTable></standingsTable>
+    <infoTable></infoTable>
   </div>
 </template>
 
 <script>
 import Navbar         from './components/Navbar.vue';
-import standingsTable from './components/standingsTable.vue';
+import infoTable from './components/infoTable.vue';
 
 export default {
   name: 'app',
   components: {
     Navbar,
-    standingsTable,
+    infoTable,
   }
 }
 </script>

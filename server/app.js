@@ -82,7 +82,7 @@ async function get_data() {
           var teams = body.standings.results,
             league_name = body.league.name,
             fixture = body.matches_next.results;
-          results = body.matches_this.results;
+            results = body.matches_this.results;
 
 
           total_prize_usd = 225.03;

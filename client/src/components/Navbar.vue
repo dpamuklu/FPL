@@ -5,7 +5,7 @@
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+    <ul class="navbar-nav mx-auto mt-2 mt-lg-0 ">
       <li class="nav-item">
         <a id="standings" v-on:click="get_standings()" href="#" class="nav-link">Standings <span class="sr-only"></span></a>
       </li>

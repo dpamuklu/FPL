@@ -1,6 +1,6 @@
 <template>
 <div>
-  <div ref="displayStandings" v-show="standingsIsReady" class="container-fluid">
+  <div ref="displayStandings" v-show="standingsIsReady" class="container">
     <div class="table-responsive">
       <h5>
         {{ league_name }}
@@ -34,10 +34,33 @@
     </div>
   </div>
 
-  <div ref="displayResults" v-show="resultsIsReady" class="container-fluid">
+  <div ref="displayResults" v-show="resultsIsReady" class="container">
+    <table class="table ">
+      <b>Matchups</b>
+      <br />
+      <tbody><br />
+        <tr v-for="result in results">
+          <td class="text-center"> {{ result.entry_1_name   }} </td>
+          <td class="text-center"> {{ result.entry_1_points   }} </td>
+          <td class="text-center"> {{ result.entry_2_points }} </td>
+          <td class="text-center"> {{ result.entry_2_name    }} </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
-  <div ref="displayFixture" v-show="fixtureIsReady" class="container-fluid">
+  <div ref="displayFixture" v-show="fixtureIsReady" class="container">
+    <table class="table ">
+      <b>Fixtures</b>
+      <br />
+      <tbody><br />
+        <tr v-for="fixture in fixtures">
+          <td class="text-center"> {{ fixture.entry_1_name   }} </td>
+          <td class="text-center"> v </td>
+          <td class="text-center"> {{ fixture.entry_2_name    }} </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
 </div>
@@ -56,7 +79,7 @@ export default {
       league_name: "",
       league_credit_name: "Lapa Kadir Sezonu",
       teams: [],
-      fixture: [],
+      fixtures: [],
       results: [],
       standingsIsReady: false,
       resultsIsReady: false,
@@ -71,15 +94,13 @@ export default {
       this.fixtureIsReady = false;
     },
     setResults: function() {
-      this.$refs.displayResults.innerHTML =
-        "Results is to be displayed here!";
       this.resultsIsReady = true;
       this.standingsIsReady = false;
       this.fixtureIsReady = false;
     },
     setFixtures: function() {
-      this.$refs.displayFixture.innerHTML =
-        "Fixture is to be displayed here!";
+      // this.$refs.displayFixture.innerHTML =
+      //   "Fixture is to be displayed here!";
       this.resultsIsReady = false;
       this.standingsIsReady = false;
       this.fixtureIsReady = true;
@@ -90,7 +111,7 @@ export default {
     let response = await axios.get('http://localhost:3000/api/all')
     this.teams = response.data.teams;
     this.league_name = response.data.leage_name;
-    this.fixture = response.data.fixture;
+    this.fixtures = response.data.fixture;
     this.results = response.data.results;
 
     this.standingsIsReady = true;
