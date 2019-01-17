@@ -108,7 +108,7 @@ export default {
   },
 
   async created() {
-    let response = await axios.get('http://localhost:3000/api/all')
+    let response = await axios.get('/api/all')
     this.teams = response.data.teams;
     this.league_name = response.data.leage_name;
     this.fixtures = response.data.fixture;
