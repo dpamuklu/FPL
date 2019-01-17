@@ -121,7 +121,6 @@ export default {
     });
 
     bus.$on('setResults', () => {
-      console.log('bus on  set results');
       this.setResults();
     });
 
