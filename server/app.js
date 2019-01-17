@@ -12,15 +12,13 @@ var
 var rootDir = "";
 
 if (process.env.NODE_ENV === "production") {
-  console.log('test');
-  console.log(path.join(__dirname, '/dist/'));
+  rootDir = path.join(__dirname, '/dist/');
   app.use(express.static(rootDir)); }
 else {
  rootDir = path.join(__dirname, '../', 'client/dist/');
  console.log(path.join(__dirname, '/dist/'));
  app.use(express.static(rootDir));
 }
-
 
 dotenv.config();
 
