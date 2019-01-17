@@ -7,18 +7,8 @@ var
   cors = require('cors'),
   functions = require('./functions/function');
 
-// const
-  // rootDir = path.join(__dirname, '../', 'client/dist/');
-var rootDir = "";
-
-if (process.env.NODE_ENV === "production") {
-  rootDir = path.join(__dirname, '/dist/');
-  app.use(express.static(rootDir)); }
-else {
- rootDir = path.join(__dirname, '../', 'client/dist/');
- console.log(path.join(__dirname, '/dist/'));
- app.use(express.static(rootDir));
-}
+const rootDir = path.join(__dirname, '/dist/');
+app.use(express.static(rootDir));
 
 dotenv.config();
 
