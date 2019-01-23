@@ -4,9 +4,8 @@ var dotenv = require("dotenv"),
   mongoose = require("mongoose"),
   fplJobData = require("../models/fplJobModel"),
   subscriberList = require("../datasource/subscriberList")
-// subscribers = require("../models/subscriberModel");
 
-dotenv.config();
+dotenv.config()
 
 function round(value, decimals) {
   return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals).toFixed(decimals)
@@ -20,8 +19,6 @@ async function connect_db() {
 }
 
 async function set_subscriber_tasks() {
-
-  console.log('background job worked');
 
   if (await check_fpl_data_is_changed()) {
 
@@ -53,9 +50,9 @@ async function check_fpl_data_is_changed() {
   const newTotalPoints = await sum_total_points(newFplData.matches_next.results)
 
   if (newFplData.matches_next.results[0].event != currentFplData[0].gameweek) {
-    console.log('week changed')
+    // console.log('week changed')
   } else if (newTotalPoints != currentFplData[0].total_points) {
-    console.log('scores changed')
+    // console.log('scores changed')
   }
 
   if (newFplData.matches_next.results[0].event != currentFplData[0].gameweek ||
