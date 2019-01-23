@@ -12,11 +12,12 @@ function round(value, decimals) {
 }
 
 async function connect_db() {
-  await mongoose.connect("mongodb://localhost/silivriFplDB", {
+  await mongoose.connect(process.env.DATABASE_URL, {
     useCreateIndex: true,
     useNewUrlParser: true
   })
 }
+//mongodb://localhost/silivriFplDB"
 
 async function set_subscriber_tasks() {
 
