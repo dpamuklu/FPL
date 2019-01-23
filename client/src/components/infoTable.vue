@@ -35,7 +35,7 @@
   </div>
 
   <div ref="displayResults" v-show="resultsIsReady" class="container">
-    <table class="table ">
+    <table class="table">
       <b>Matchups</b>
       <br />
       <tbody><br />
@@ -99,8 +99,6 @@ export default {
       this.fixtureIsReady = false;
     },
     setFixtures: function() {
-      // this.$refs.displayFixture.innerHTML =
-      //   "Fixture is to be displayed here!";
       this.resultsIsReady = false;
       this.standingsIsReady = false;
       this.fixtureIsReady = true;

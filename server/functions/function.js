@@ -1,14 +1,141 @@
 var dotenv = require("dotenv"),
   request = require("request"),
-  nodemailer = require("nodemailer");
+  nodemailer = require("nodemailer"),
+  mongoose = require("mongoose"),
+  fplJobData = require("../models/fplJobModel"),
+  subscriberList = require("../datasource/subscriberList")
+// subscribers = require("../models/subscriberModel");
 
 dotenv.config();
 
 function round(value, decimals) {
-  return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals).toFixed(decimals);
-};
+  return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals).toFixed(decimals)
+}
 
-async function send_mail() {
+async function connect_db() {
+  await mongoose.connect("mongodb://localhost/subscribers", {
+    useCreateIndex: true,
+    useNewUrlParser: true
+  })
+}
+
+async function set_subscriber_tasks() {
+
+  console.log('background job worked');
+
+  if (await check_fpl_data_is_changed()) {
+
+    send_mail(subscriberList)
+
+  }
+}
+
+async function get_subscribers() {
+  return new Promise((resolve, reject) => {
+    subscribers.find({},
+      function(err, subscriberList) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(subscriberList)
+        }
+      })
+  })
+}
+
+async function check_fpl_data_is_changed() {
+
+  const newFplData = await get_fpl_api_infos()
+
+  await connect_db()
+
+  const currentFplData = await get_current_fpl_data()
+  const newTotalPoints = await sum_total_points(newFplData.matches_next.results)
+
+  if (newFplData.matches_next.results[0].event != currentFplData[0].gameweek) {
+    console.log('week changed')
+  } else if (newTotalPoints != currentFplData[0].total_points) {
+    console.log('scores changed')
+  }
+
+  if (newFplData.matches_next.results[0].event != currentFplData[0].gameweek ||
+
+    newTotalPoints != currentFplData[0].total_points) {
+
+    await delete_current_data()
+
+    await update_with_actual_data(newFplData.matches_next.results[0].event, newTotalPoints)
+
+    return true
+
+  }
+}
+
+async function sum_total_points(results) {
+  let totalPoints = 0
+  results.forEach(function(element) {
+    totalPoints = totalPoints + element.entry_1_points + element.entry_2_points
+  });
+  return totalPoints
+}
+
+async function delete_current_data() {
+
+  return new Promise((resolve, reject) => {
+    fplJobData.deleteMany({},
+      function(err, oldJob) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(oldJob)
+        }
+      }
+    )
+  })
+}
+
+async function update_with_actual_data(actualGameweek, totalPoints) {
+  return new Promise((resolve, reject) => {
+    fplJobData.create({
+      "gameweek": actualGameweek,
+      "total_points": totalPoints
+    }, function(err, newJob) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(newJob)
+      }
+    })
+  })
+}
+
+async function get_current_fpl_data() {
+
+  return new Promise((resolve, reject) => {
+    fplJobData.find({}, function(err, infos) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(infos)
+      }
+    })
+  })
+}
+
+async function get_fpl_api_infos() {
+  return new Promise((resolve, reject) => {
+    request({
+        url: 'https://fantasy.premierleague.com/drf/leagues-h2h-standings/342211',
+        json: true
+      },
+      function(error, response, body) {
+        resolve(body)
+      }
+    )
+  })
+}
+
+async function send_mail(subscribers) {
 
   var transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -16,20 +143,30 @@ async function send_mail() {
       user: process.env.MAIL_NAME,
       pass: process.env.MAIL_PASS
     }
-  });
+  })
+
+  let toList = "";
+  subscribers.forEach(function(subscriber, index) {
+    if (index == 0) {
+      toList = subscriber
+    } else {
+      toList = toList + ',' + subscriber
+    }
+  })
+  console.log(toList);
 
   const mailOptions = {
     from: 'doganpamuklu05@gmail.com',
-    to: 'doganpamuklu05@gmail.com',
+    to: toList,
     subject: 'Silivri FPL',
     html: 'Veriler yenilendi! https://silivri-fpl.herokuapp.com adresinden sonuclar goruntulenebilir!'
-  };
+  }
 
   transporter.sendMail(mailOptions, function(err, info) {
     if (err)
       console.log(err)
     else
-      console.log(info);
+      console.log(info)
   })
 }
 
@@ -43,8 +180,8 @@ async function get_usd_rate() {
       if (!error) {
         resolve(body.rates.TRY);
       }
-    });
-  });
+    })
+  })
 }
 
 async function get_data() {
@@ -60,8 +197,8 @@ async function get_data() {
         if (!error && response.statusCode === 200) {
           var teams = body.standings.results,
             league_name = body.league.name,
-            fixture = body.matches_next.results;
-          results = body.matches_this.results;
+            fixture = body.matches_next.results
+          results = body.matches_this.results
 
 
           total_prize_usd = 225.03;
@@ -90,7 +227,7 @@ async function get_data() {
             fixture: fixture,
             results: results,
           };
-          resolve(info);
+          resolve(info)
         };
       }
     );
@@ -107,14 +244,14 @@ async function get_results_info() {
       function(error, response, body) {
         if (!error && response.statusCode === 200) {
           var teams = body.standings.results,
-            league_name = body.league.name;
+            league_name = body.league.name
 
 
           resolve(info);
-        };
+        }
       }
-    );
-  });
+    )
+  })
 };
 
 async function get_fixture_info() {
@@ -128,15 +265,17 @@ async function get_fixture_info() {
         if (!error && response.statusCode === 200) {
 
           var teams = body.standings.results,
-            league_name = body.league.name;
+            league_name = body.league.name
 
           resolve(info);
-        };
+        }
       }
-    );
-  });
-};
+    )
+  })
+}
 
 module.exports = {
-  get_data
+  get_data,
+  send_mail,
+  set_subscriber_tasks
 };
