@@ -12,7 +12,7 @@ function round(value, decimals) {
 }
 
 async function connect_db() {
-  await mongoose.connect("mongodb://localhost/subscribers", {
+  await mongoose.connect("mongodb://localhost/silivriFplDB", {
     useCreateIndex: true,
     useNewUrlParser: true
   })
@@ -47,7 +47,19 @@ async function check_fpl_data_is_changed() {
   await connect_db()
 
   const currentFplData = await get_current_fpl_data()
+
   const newTotalPoints = await sum_total_points(newFplData.matches_next.results)
+
+  // if no record exist in database, update db with api data and exit
+  if (currentFplData.length == 0) {
+
+    await update_with_actual_data(newFplData.matches_next.results[0].event, newTotalPoints)
+
+    const currentFplData = await get_current_fpl_data()
+
+    return false
+
+  }
 
   if (newFplData.matches_next.results[0].event != currentFplData[0].gameweek) {
     // console.log('week changed')
@@ -150,7 +162,6 @@ async function send_mail(subscribers) {
       toList = toList + ',' + subscriber
     }
   })
-  console.log(toList);
 
   const mailOptions = {
     from: 'doganpamuklu05@gmail.com',

@@ -20,9 +20,11 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cors());
 
+const refreshTimeMs = 600000
+
 setInterval(function() {
   functions.set_subscriber_tasks()
-}, 600000)
+}, refreshTimeMs)
 
 
 app.get("/api/all", async function(req, res) {
