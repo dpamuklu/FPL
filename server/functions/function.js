@@ -12,7 +12,7 @@ function round(value, decimals) {
 }
 
 async function connect_db() {
-  await mongoose.connect(process.env.DATABASE_URL, {
+  await mongoose.connect("mongodb://localhost/silivriFplDB", {
     useCreateIndex: true,
     useNewUrlParser: true
   })
@@ -232,7 +232,7 @@ async function get_data() {
           });
           var info = {
             teams: teams,
-            leage_name: league_name,
+            league_name: league_name,
             fixture: fixture,
             results: results,
           };

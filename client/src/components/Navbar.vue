@@ -21,22 +21,32 @@
 </template>
 
 <script>
+
 import {
   bus
 } from '../main';
+
+import {
+  mapGetters, mapActions
+} from 'vuex';
 
 export default {
   name: 'Navbar',
   props: {},
   methods: {
+    ...mapActions([
+      'setStandings',
+      'setResults',
+      'setFixtures'
+    ]),
     get_standings: function() {
-      bus.$emit('setStandings');
+      this.$store.dispatch('setStandings')
     },
     get_results: function() {
-      bus.$emit('setResults');
+      this.$store.dispatch('setResults')
     },
     get_fixtures: function() {
-      bus.$emit('setFixtures');
+      this.$store.dispatch('setFixtures')
     },
     refresh_page: function() {
       setTimeout(function() {

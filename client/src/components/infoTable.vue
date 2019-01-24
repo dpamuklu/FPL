@@ -1,6 +1,6 @@
 <template>
 <div>
-  <div ref="displayStandings" v-show="standingsIsReady" class="container">
+  <div ref="displayStandings" v-show="this.$store.state.standingsIsReady" class="container">
     <div class="table-responsive">
       <h5>
         {{ league_name }}
@@ -20,7 +20,6 @@
           </tr>
         </thead>
         <tbody>
-
           <tr v-for="team in teams">
             <th scope="row"> {{ team.rank         }} </th>
             <td> {{ team.entry_name   }} </td>
@@ -34,7 +33,7 @@
     </div>
   </div>
 
-  <div ref="displayResults" v-show="resultsIsReady" class="container">
+  <div ref="displayResults" v-show="this.$store.state.resultsIsReady" class="container">
     <table class="table">
       <b>Matchups</b>
       <br />
@@ -49,7 +48,7 @@
     </table>
   </div>
 
-  <div ref="displayFixture" v-show="fixtureIsReady" class="container">
+  <div ref="displayFixture" v-show="this.$store.state.fixtureIsReady" class="container">
     <table class="table ">
       <b>Fixtures</b>
       <br />
@@ -67,69 +66,53 @@
 </template>
 
 <script>
-import axios from 'axios';
 import {
-  bus
-} from '../main';
+  mapActions
+} from 'vuex';
+import {
+  mapGetters
+} from 'vuex';
 
 export default {
   name: 'appcontent',
+
+  computed: {
+    ...mapGetters([
+      'fplInfos',
+      'league_name',
+      'league_credit_name',
+      'teams',
+      'results',
+      'fixtures'
+    ])
+  },
+
   data() {
-    return {
-      league_name: "",
-      league_credit_name: "Lapa Kadir Sezonu",
-      teams: [],
-      fixtures: [],
-      results: [],
-      standingsIsReady: false,
-      resultsIsReady: false,
-      fixtureIsReady: false,
-    }
+    return {}
   },
 
   methods: {
-    setStandings: function() {
-      this.resultsIsReady = false;
-      this.standingsIsReady = true;
-      this.fixtureIsReady = false;
-    },
-    setResults: function() {
-      this.resultsIsReady = true;
-      this.standingsIsReady = false;
-      this.fixtureIsReady = false;
-    },
-    setFixtures: function() {
-      this.resultsIsReady = false;
-      this.standingsIsReady = false;
-      this.fixtureIsReady = true;
-    },
+    ...mapActions([
+      'getFplInfos',
+      'setStandings',
+      'setFixtures',
+      'setResults'
+    ])
   },
 
   async created() {
-    let response = await axios.get('/api/all')
-    this.teams = response.data.teams;
-    this.league_name = response.data.leage_name;
-    this.fixtures = response.data.fixture;
-    this.results = response.data.results;
-
-    this.standingsIsReady = true;
-
-    bus.$on('setStandings', () => {
-      this.setStandings();
-    });
-
-    bus.$on('setResults', () => {
-      this.setResults();
-    });
-
-    bus.$on('setFixtures', () => {
-      this.setFixtures();
-    });
+    this.$store.dispatch('getFplInfos')
   },
-
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+h5 {
+  text-align: center
+}
+
+.table {
+  margin-top: 2rem
+}
 </style>
