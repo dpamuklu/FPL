@@ -4,7 +4,7 @@ import axios from 'axios'
 
 Vue.use(Vuex)
 
-export const store                 = new Vuex.Store({
+export const store = new Vuex.Store({
   strict: true,
 
   state: {
@@ -40,41 +40,47 @@ export const store                 = new Vuex.Store({
 
   mutations: {
 
-    setStandings: (state)          => {
-      state.resultsIsReady         = false
-      state.standingsIsReady       = true
-      state.fixtureIsReady         = false
+    setStandings: (state) => {
+      state.resultsIsReady = false
+      state.fixtureIsReady = false
+      if (state.fpl_infos.teams.length > 0) {
+        state.standingsIsReady = true
+      }
     },
-    setResults: (state)            => {
-      state.resultsIsReady         = true
-      state.standingsIsReady       = false
-      state.fixtureIsReady         = false
+    setResults: (state) => {
+      state.standingsIsReady = false
+      state.fixtureIsReady = false
+      if (state.fpl_infos.results.length > 0) {
+        state.resultsIsReady = true
+      }
     },
-    setFixtures: (state)           => {
-      state.resultsIsReady         = false
-      state.standingsIsReady       = false
-      state.fixtureIsReady         = true
+    setFixtures: (state) => {
+      state.resultsIsReady = false
+      state.standingsIsReady = false
+      if (state.fpl_infos.fixtures.length > 0) {
+        state.fixtureIsReady = true
+      }
     },
     setFplInfos: (state, response) => {
-      state.fpl_infos.teams        = response.data.teams;
-      state.fpl_infos.league_name  = response.data.league_name;
-      state.fpl_infos.fixtures     = response.data.fixture;
-      state.fpl_infos.results      = response.data.results;
+      state.fpl_infos.teams = response.data.teams;
+      state.fpl_infos.league_name = response.data.league_name;
+      state.fpl_infos.fixtures = response.data.fixture;
+      state.fpl_infos.results = response.data.results;
     }
   },
 
   actions: {
-    setStandings: (context)        => {
+    setStandings: (context) => {
       context.commit('setStandings')
     },
-    setResults: (context)          => {
+    setResults: (context) => {
       context.commit('setResults')
     },
-    setFixtures: (context)         => {
+    setFixtures: (context) => {
       context.commit('setFixtures')
     },
     getFplInfos: async function(context) {
-      let response                 = await axios.get('http://localhost:3000/api/all')
+      let response = await axios.get('http://localhost:3000/api/all')
 
       context.commit('setFplInfos', response)
       context.commit('setStandings')

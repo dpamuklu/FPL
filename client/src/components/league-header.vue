@@ -2,7 +2,7 @@
   <div>
     <h5 class="centeralign">
       {{ league_name }}
-      <small class="text-muted">
+      <small class="text-muted" v-show="league_name">
         {{ league_credit_name }}
       </small>
     </h5>
@@ -20,7 +20,6 @@ export default {
     return {
     }
   },
-
   computed: {
     ...mapGetters([
       'league_name',

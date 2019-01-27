@@ -1,7 +1,6 @@
 <template>
-  <div ref="displayStandings" v-show="this.$store.state.standingsIsReady" class="container">
+  <div class="container">
     <div class="table-responsive">
-      <leagueHeader></leagueHeader>
       <table class="table table-bordered">
         <thead>
           <tr>
@@ -30,23 +29,22 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import leagueHeader from './league-header.vue'
 
 export default {
   name: 'appcontent',
   components: {
-    leagueHeader
   },
   data() {
     return {
+      isLoaded(){
+        return true
+      },
       isActive: true
     }
   },
 
   computed: {
     ...mapGetters([
-      'league_name',
-      'league_credit_name',
       'teams',
     ]),
   },

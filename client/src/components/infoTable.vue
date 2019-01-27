@@ -1,13 +1,15 @@
 <template>
   <div>
-    <standings></standings>
-    <results></results>
-    <fixtures></fixtures>
+    <leagueHeader></leagueHeader>
+    <standings v-if="this.$store.state.standingsIsReady"></standings>
+    <results   v-if="this.$store.state.resultsIsReady"></results>
+    <fixtures  v-if="this.$store.state.fixtureIsReady"></fixtures>
   </div>
 </template>
 
 <script>
 
+import leagueHeader   from './league-header.vue'
 import standings      from './standings.vue'
 import results        from './results.vue'
 import fixtures       from './fixtures.vue'
@@ -15,9 +17,10 @@ import fixtures       from './fixtures.vue'
 export default {
   name: 'appcontent',
   components: {
+     leagueHeader,
      standings,
      results,
-     fixtures
+     fixtures,
   },
   data() {
     return {
