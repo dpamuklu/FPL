@@ -2,7 +2,7 @@
 <div>
   <div ref="displayStandings" v-show="this.$store.state.standingsIsReady" class="container">
     <div class="table-responsive">
-      <h5>
+      <h5 class="centeralign">
         {{ league_name }}
         <small class="text-muted">
           {{ league_credit_name }}
@@ -20,7 +20,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="team in teams">
+          <tr v-for="(team, idx) in teams" v-bind:key="idx">
             <th scope="row"> {{ team.rank         }} </th>
             <td> {{ team.entry_name   }} </td>
             <td> {{ team.points_for   }} </td>
@@ -38,7 +38,7 @@
       <b>Matchups</b>
       <br />
       <tbody><br />
-        <tr v-for="result in results">
+        <tr v-for="(result, idx) in results" v-bind:key="idx">
           <td class="text-center"> {{ result.entry_1_name   }} </td>
           <td class="text-center"> {{ result.entry_1_points   }} </td>
           <td class="text-center"> {{ result.entry_2_points }} </td>
@@ -49,11 +49,11 @@
   </div>
 
   <div ref="displayFixture" v-show="this.$store.state.fixtureIsReady" class="container">
-    <table class="table ">
+    <table class="table">
       <b>Fixtures</b>
       <br />
       <tbody><br />
-        <tr v-for="fixture in fixtures">
+        <tr v-for="(fixture, idx) in fixtures" v-bind:key="idx">
           <td class="text-center"> {{ fixture.entry_1_name   }} </td>
           <td class="text-center"> v </td>
           <td class="text-center"> {{ fixture.entry_2_name    }} </td>
@@ -75,6 +75,11 @@ import {
 
 export default {
   name: 'appcontent',
+  data() {
+    return {
+      isLoading: true
+    }
+  },
 
   computed: {
     ...mapGetters([
@@ -84,11 +89,7 @@ export default {
       'teams',
       'results',
       'fixtures'
-    ])
-  },
-
-  data() {
-    return {}
+    ]),
   },
 
   methods: {
@@ -107,9 +108,9 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h5 {
-  text-align: center
+<style>
+.centeralign {
+  text-align: center;
 }
 
 .table {

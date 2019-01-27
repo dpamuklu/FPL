@@ -1,18 +1,18 @@
-var
-  express = require('express'),
-  app = express(),
-  bodyParser = require("body-parser"),
-  dotenv = require("dotenv"),
-  path = require('path'),
-  cors = require('cors'),
-  functions = require('./functions/function'),
-  history = require('connect-history-api-fallback');
+var express    = require('express'),
+    app        = express(),
+    bodyParser = require("body-parser"),
+    dotenv     = require("dotenv"),
+    path       = require('path'),
+    cors       = require('cors'),
+    functions  = require('./functions/function'),
+    history    = require('connect-history-api-fallback');
 
-const rootDir = path.join(__dirname, '/dist/');
-app.use(express.static(rootDir));
+const rootDir       = path.join(__dirname, '/dist/')
+      refreshTimeMs = 600000;
 
 dotenv.config();
 
+app.use(express.static(rootDir));
 app.use(history());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -20,12 +20,9 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cors());
 
-const refreshTimeMs = 600000
-
 setInterval(function() {
   functions.set_subscriber_tasks()
 }, refreshTimeMs)
-
 
 app.get("/api/all", async function(req, res) {
   var info = await functions.get_data();

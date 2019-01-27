@@ -1,6 +1,6 @@
 import mainPage from './components/mainPage.vue'
 
 export default [{
-  path: '/',
+  path     : '/',
   component: mainPage
 }]

@@ -1,8 +1,8 @@
-var dotenv = require("dotenv"),
-  request = require("request"),
-  nodemailer = require("nodemailer"),
-  mongoose = require("mongoose"),
-  fplJobData = require("../models/fplJobModel"),
+var dotenv       = require("dotenv"),
+  request        = require("request"),
+  nodemailer     = require("nodemailer"),
+  mongoose       = require("mongoose"),
+  fplJobData     = require("../models/fplJobModel"),
   subscriberList = require("../datasource/subscriberList")
 
 dotenv.config()
