@@ -1,23 +1,20 @@
 <template>
   <div>
-    <standings></standings>
-    <results></results>
-    <fixtures></fixtures>
+    <h5 class="centeralign">
+      {{ league_name }}
+      <small class="text-muted">
+        {{ league_credit_name }}
+      </small>
+    </h5>
   </div>
 </template>
 
 <script>
-
-import standings      from './standings.vue'
-import results        from './results.vue'
-import fixtures       from './fixtures.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'appcontent',
-  components: {
-     standings,
-     results,
-     fixtures
+  props: {
   },
   data() {
     return {
@@ -25,6 +22,10 @@ export default {
   },
 
   computed: {
+    ...mapGetters([
+      'league_name',
+      'league_credit_name',
+    ]),
   },
 
   methods: {
